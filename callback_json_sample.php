@@ -20,3 +20,28 @@ $params['notify']='결제 결과를 전달받을 여러분의 서버 URL';  // �
 $url="http://wara-kr.quickget.co/pay/request.html";
 $result=file_get_contents($url."?".http_build_query($params));
 
+
+/**
+* 여기서부터는 위의 요청에 따른 리턴값 예제
+*/
+
+JSON 방식으로 리턴됨
+{
+	"code": 0,
+	"quickid": 346,
+	"message": "https:\/\/epay.miguyouxi.com\/jump-init.do?cmd=quick&country=kr&id=MzQ2",
+	"qrcode": "http:\/\/wara-kr.quickget.co\/uploadfile\/qrcode\/3139ed4b18377b36bcf1857bb8255489_logo.png",
+	"token": "1645r0c"
+}
+
+/**
+* 여기서부터는 최종 사용자가 결제를 완료하면, 결제 결과를 전달받는 여러분의 서버 URL에서 받는 내용
+*/
+
+echo $_POST['code'];	// 성공 실패 여부
+echo $_POST['trade_sn'];	// 영수증 번호
+echo $_POST['appid'];	// 상점 appid
+echo $_POST['custom_trade_sn'];	// 주문서 번호
+echo $_POST['money'];	// 실제 결제 금액
+echo $_POST['status'];	// 결제 결과 메세지
+echo $_POST['paytime'];	// 결제 완료 시간
