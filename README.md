@@ -2,8 +2,18 @@
 퀵겟 QR 페이먼트 게이트
 
 ## API 설명서
-아래 내용을 적용하시려면, 쇼핑몰과 연결하는 자바스크립트 또는 PHP 언어 등에 대한 기본적인 지식이 필요합니다.
-### 1. QR 코드 요청 HTTP GET
+주의 : 아래 내용을 적용하시려면, 쇼핑몰과 연결하는 자바스크립트 또는 PHP 언어 등에 대한 기본적인 지식이 필요합니다.
+
+### 1. 결제용 QR 코드 요청
+
+* 요청 메세지 URL
+
+HTTP URL|http://wara-kr.quickget.co/pay/request.html
+----|----
+HTTP Method|GET
+
+* 요청 메세지 전달 인자설명
+
 인자명|필요여부|기본값|설명
 ----|----|----|----
 appid|필요|없음|상점 appid(와라페이 앱 등에서 확인 가능)
@@ -17,19 +27,26 @@ qrsize|옵션|10|위의 qrsizetype을 mp로 지정했다면, 1.00 ~ 50.00의 크
 qrimagetype|옵션|png|이미지 포맷 지정이 가능하며 png 와 jpg 중 선택 가능합니다.
 custom|옵션|0|금액|입력 단위로, 만약 0이외의 값을 입력했다면, money 값이 0인것처럼, 고객이 결제금액을 입력하는 방식이 됩니다. 즉, 100, 500, 1000 등으로 결제 금액 단위를 설정 가능하며, 예를들어 500으로 입력했다면, 고객은 500원 단위로 결제금액을 입력해서 결제 가능합니다. 이 기능은 보통 자동판매기 등에서 500원 코인이나, 1000원 지폐를 여러장 결제 받는 등의 용도로 사용됩니다.
 
-#### 인자 전달 방식 : GET 방식
-#### 요청 URL : http://wara-kr.quickget.co/pay/request.html
-#### 예> http://wara-kr.quickget.co/pay/request.html?appid=86572812&money=100&callback=html&return=www.yourserverurl.com/yourprocess.php
+<pre>
+예> http://wara-kr.quickget.co/pay/request.html?appid=86572812&money=100&callback=html&return=www.yourserverurl.com/yourprocess.php
+ * GET방식이므로 웹브라우저에서 테스트 가능
+</pre>
 
-### 2. 위의 GET 호출에 대한 결과값 반환(callback=html 인 경우는 바로 결제화면이 열리므로 해당없음)
-JSON 리턴 code 값 : 0이면 성공, 1이면 실패 
-JSON 리턴 message 값 : 성공시, QR 코드에 대한 정보. 실패시 실패 관련 메세지 
-JSON 리턴 qrcode 값 : QR코드용 주소 - 이 주소를 이용하여 직접 QR코드를 생성하여, 자신의 웹사이트에 표시
+* 응답 메세지 설명
 
-성공시 예: {"code":0,"message":"https://epay.miguyouxi.com/*****","qrcode":"http://wara-kr.netmego.com/*****"}
-		
-실패시 예: {"code":1,"message":"appid_error"}
+callback=html|바로 결제화면이 열리기 때문에, 응답메세지가 따로 존재하지 않음
+----|----
+callback=json| JSON 리턴 code 값 : 0이면 성공, 1이면 실패
+-|JSON 리턴 message 값 : 성공시, QR 코드에 대한 정보. 실패시 실패 관련 메세지 
+-|JSON 리턴 qrcode 값 : QR코드용 주소 - 이 주소를 이용하여 직접 QR코드를 생성하여, 자신의 웹사이트에 표시
 
+<pre>
+성공시 예: 
+	{"code":0,"message":"https://epay.miguyouxi.com/*****","qrcode":"http://wara-kr.netmego.com/*****"}	
+	
+실패시 예: 
+	{"code":1,"message":"appid_error"}
+</pre>
 ### 3. 결제 결과가 자신의 Notify URL 서버로 전달됨 ( POST 방식 : callback=json 으로 요청한 경우 )
 인자명|설명
 ----|----
